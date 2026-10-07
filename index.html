@@ -223,7 +223,8 @@
 
     <section id="sobre-lulu" class="sobre-section">
         <div class="stage">
-            <img class="stage-bg" src="lulu4-opt.jpg" alt="">
+            <img class="stage-bg" src="lulu8.jpg" alt="">
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" aria-hidden="true"></div>
             <div class="stage-content">
                 <h2 class="grand-heavy stage-title">Lulú Tanguera</h2>
                 <p class="regular"><span class="grand-bold">Lulú Tanguera </span> es cantante, actriz e intérprete porteña con más de dos décadas de trayectoria. Desde sus raíces en La Boca construye un universo propio donde el tango se cruza con la actuación, el humor, la sensualidad y la irreverencia.</p>
@@ -233,7 +234,7 @@
                 <a href="https://open.spotify.com/intl-es/album/1J48RRsoHRqSSv0IkoWeec?si=okCt8viQTD-u05g86r3aBQ" target="_blank" class="grand-bold stage-link">Dale Play</a>
                 <a href="biografia.html" class="grand-bold stage-link">Bio Completa</a>
                 <a href="#discografia" class="grand-bold stage-link">Podrán?</a>
-                <a href="#discografia" class="grand-bold stage-link">Lulú Novedades</a>
+                <a href="#novedades" class="grand-bold stage-link">Lulú Novedades</a>
                 <a href="#contacto" class="grand-bold stage-link">Contacto</a>
                 <div id="wrap">
             <div id="album">
@@ -371,13 +372,28 @@
 }
 </style>
 
-    <section class="h-[100dvh] w-[100dvw] bg-[#ba0600]"></section>
+    <section id="novedades" class="relative grid h-[100dvh] w-[100dvw] grid-cols-2 overflow-hidden bg-[#ba0600]">
+        <canvas id="magnetic-shader" class="absolute inset-0 h-full w-full"></canvas>
+        <div class="md:ms-8 pointer-events-none relative z-10 flex flex-col items-start justify-start p-8">
+            <h2 class="pt-3 grand-heavy text-[2.5rem] leading-none text-white md:text-[4rem]">Novedades</h2>
+            <p class="grand-bold mt-6 max-w-md  leading-tight text-white ">26 de noviembre</p>
+            <p class="grand-heavy text-2xl md:text-4xl text-white">Lanzamiento de nuevo disco</p>
+            <p class="regular text-white">En Club Social 911</p>
+            <hr>
+            <p class="grand-heavy mt-6 max-w-md  leading-tight text-white ">Próximamente</p>
+            <p class=" grand-bold text-2xl md:text-4xl text-white">Sección de Fans de Lulú en su página web</p>
+            <p class="regular text-white">A fin de este mes vas a poder subir tus imágenes, comentarios y reviews de Lulú en su sitio web.</p>
+        </div>
+        <div class="pointer-events-none relative z-10 flex items-start justify-center pt-[6vh] [perspective:1200px]">
+            <img id="novedades-img" class="shrink-0 max-w-none h-[80%] w-auto min-h-[480px] min-w-[320px] object-contain" src="lulutanguera26nov.gif" alt="Lulú Tanguera">
+        </div>
+    </section>
 
     <section id="contacto" class="dots-section">
         <div class="dots-bg" aria-hidden="true"></div>
         <div class="dots-lulu-tile" aria-hidden="true"></div>
         <div class="dots-links grand-heavy absolute left-8 top-[150px] max-md:top-[60px] z-10 flex flex-col items-start gap-2">
-            <a class="dot" href="#contacto"><span>Representante</span></a>
+            <a class="dot" href="#contacto"><span>Contrataciones</span></a>
             <a class="dot" href="https://www.instagram.com/lulutanguera/?hl=en" target="_blank"><span>Instagram</span></a>
             <a class="dot" href="https://open.spotify.com/intl-es/artist/5LBBLZ1QQ5Z3ug09QlgQDI?si=JN4ZGvWnTOe5SSWAvX1NMA" target="_blank"><span>Spotify</span></a>
             <a id="colabora-trigger" class="dot" href="#"><span>MercadoPago (para colaborar)</span></a>
@@ -403,10 +419,11 @@
         </div>
     </div>
 
-    <div id="colabora-modal" class="grand-heavy fixed inset-0 z-[100] hidden place-items-center bg-black/80 p-6">
+    <div id="colabora-modal" class="regular fixed inset-0 z-[100] hidden place-items-center bg-black/80 p-6">
         <div class="relative max-w-lg bg-black px-8 py-10 text-center ring-2 ring-[#ba0600]">
-            <p class="text-xl leading-snug text-white md:text-2xl">Podés colaborar con Lulú Tanguera al alias</p>
-            <p class="mt-4 text-2xl text-[#ba0600] md:text-3xl">lulutanguera</p>
+            <p class="text-xl leading-snug text-white md:text-2xl">Si viste un show de Lulú y te quedaste con ganas de aportar en la gorra</p>
+            <p class="text-xl leading-snug text-white md:text-xl">podés colaborar a su alias:</p>
+            <p class="mt-4 text-2xl text-[#ba0600] md:text-3xl grand-heavy">lulutanguera</p>
             <button id="colabora-close" type="button" class="grand-bold mt-8 cursor-pointer bg-[#ba0600] px-[0.6em] py-[0.25em] text-sm tracking-wide text-white hover:bg-[#8a0500]">Cerrar</button>
         </div>
     </div>
@@ -560,6 +577,20 @@
                     document.querySelector(".dots-links"),
                     { radius: 150, maxAngle: 16, sensitivity: 220 }
                 ),
+                ...gsap.utils
+                    .toArray("button")
+                    .filter(
+                        (b) =>
+                            !b.closest(".hero2-actions") &&
+                            !b.closest(".nav-item")
+                    )
+                    .map((b) =>
+                        makePendulum(
+                            [b],
+                            b.offsetParent || b.parentElement || document.body,
+                            { radius: 150, maxAngle: 16, sensitivity: 220 }
+                        )
+                    ),
             ].filter(Boolean);
 
             window.addEventListener("mousemove", (e) => {
@@ -663,6 +694,15 @@ makeTilt(menu3d, ".menu-scene", {
                         damp: 0.78,
                         active: () => menu3d.classList.contains("open"),
                     });
+            }
+            const novedades = document.getElementById("novedades");
+            if (novedades) {
+                makeTilt(novedades, "#novedades-img", {
+                    maxX: 2,
+                    maxY: 3,
+                    ease: 0.045,
+                    damp: 0.78,
+                });
             }
         }
 
@@ -919,6 +959,20 @@ makeTilt(menu3d, ".menu-scene", {
     })
       .then(() => console.log("[shader] render OK (SmokeFlow)"))
       .catch((e) => console.error("[shader] error:", e));
+  }
+</script>
+
+<script type="module">
+  import { createShader, isWebGPUSupported } from 'https://cdn.jsdelivr.net/npm/shaders@latest/dist/js/index.min.js';
+
+  if (isWebGPUSupported()) {
+    createShader(document.getElementById('magnetic-shader'), {
+      components: [
+        { type: 'MagneticFilings', id: 'filings', props: { shape: 'streak' } },
+      ],
+    })
+      .then(() => console.log('[magnetic] render OK'))
+      .catch((e) => console.error('[magnetic] error:', e));
   }
 </script>
 </body>

@@ -37,6 +37,23 @@
     font-weight: 400;
 }
 
+/* Estilo compartido del "botón rojo" */
+nav button,
+.hero2-actions button,
+.bio-back,
+.dot span {
+    color: #ffffff;
+    background: #ba0600;
+    padding: 0.15em 0.4em;
+}
+
+nav button:hover,
+.hero2-actions button:hover,
+.bio-back:hover,
+.dot:hover span {
+    background: #8a0500;
+}
+
 .sobre-section {
     position: relative;
     width: 100dvw;
@@ -236,16 +253,6 @@
     margin-top: 3rem;
 }
 
-.hero2-actions button {
-    color: #ffffff;
-    background: #ba0600;
-    padding: 0.15em 0.4em;
-}
-
-.hero2-actions button:hover {
-    background: #8a0500;
-}
-
 #menu {
     --dot: 150px;
     position: fixed;
@@ -282,18 +289,6 @@
     height: 100dvh;
     overflow: hidden;
     background: #ffffff;
-}
-
-.dots-lulu {
-    position: absolute;
-    inset: auto 0 0 0;
-    margin: 0 auto;
-    height: 92%;
-    width: 100%;
-    object-fit: contain;
-    object-position: center bottom;
-    pointer-events: none;
-    user-select: none;
 }
 
 .dots-lulu-tile {
@@ -359,14 +354,8 @@
 
 .dot span {
     display: inline-block;
-    background: #ba0600;
-    padding: 0.15em 0.4em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
-}
-
-.dot:hover span {
-    background: #8a0500;
 }
 
 .menu-english {
@@ -375,12 +364,6 @@
 
 body.nav-open {
     overflow: hidden;
-}
-
-nav button {
-    color: #ffffff;
-    background: #ba0600;
-    padding: 0.15em 0.4em;
 }
 
 @media (max-width: 767px) {
@@ -433,13 +416,6 @@ body.bio {
 
 .bio-back {
     display: inline-block;
-    color: #ffffff;
-    background: #ba0600;
-    padding: 0.15em 0.4em;
-}
-
-.bio-back:hover {
-    background: #8a0500;
 }
 
 @media (max-width: 767px) {
@@ -448,13 +424,11 @@ body.bio {
     }
 }
 
-.tray-swiper,
-.disco-swiper {
+.tray-swiper {
     padding-bottom: 0.5rem;
 }
 
-.tray-pagination,
-.disco-pagination {
+.tray-pagination {
     position: static;
     display: flex;
     justify-content: center;
@@ -462,8 +436,7 @@ body.bio {
     margin-top: 1.75rem;
 }
 
-.tray-pagination .swiper-pagination-bullet,
-.disco-pagination .swiper-pagination-bullet {
+.tray-pagination .swiper-pagination-bullet {
     width: 8px;
     height: 8px;
     margin: 0 !important;
@@ -471,8 +444,7 @@ body.bio {
     opacity: 0.35;
 }
 
-.tray-pagination .swiper-pagination-bullet-active,
-.disco-pagination .swiper-pagination-bullet-active {
+.tray-pagination .swiper-pagination-bullet-active {
     background: #ba0600;
     opacity: 1;
 }
