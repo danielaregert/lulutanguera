@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lulú Tanguera</title>
+    <link rel="icon" href="favicon-2.gif">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Shrikhand&display=swap');
+
+        #ipod-player {
+            position: fixed;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            z-index: 60;
+            width: 250px;
+            height: 250px;
+            font-family: 'Shrikhand', sans-serif;
+            color: #FF1744;
+            font-size: 18px;
+            transform-origin: bottom right;
+            transform: scale(0.8);
+        }
+
+        #ipod-player *, #ipod-player *:before, #ipod-player *:after {
+            box-sizing: border-box;
+        }
+
+        #ipod-player *:before, #ipod-player *:after {
+            content: '';
+            position: absolute;
+        }
+
+        #ipod-player .ipod {
+            width: 150px;
+            height: 200px;
+            background: #212121;
+            border-radius: 10px;
+            margin: auto;
+            position: relative;
+            top: 25px;
+            box-shadow: -1px -1px 0 white,
+                -4px -4px 0 black,
+                -5px -5px 0 #FF1744;
+        }
+
+        #ipod-player .screen {
+            background: cyan;
+            width: 80%;
+            height: 45%;
+            margin: auto;
+            position: relative;
+            top: 10px;
+            border-radius: inherit;
+            box-shadow: inset -2px -2px 0 white;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+        }
+
+        #ipod-player .buttons {
+            width: 70px;
+            height: 70px;
+            border-radius: 50px;
+            background: #263238;
+            margin: auto;
+            position: relative;
+            top: 25px;
+            box-shadow: 1px 1px 0 inset;
+        }
+
+        #ipod-player .buttons:before {
+            background: linear-gradient(-45deg, #FF1744 20%, transparent 20%) -5px 1px / 15px 10px no-repeat, linear-gradient(-135deg, #FF1744 20%, transparent 20%) -5px 10px / 15px 10px no-repeat, linear-gradient(45deg, #FF1744 20%, transparent 20%) 45px 2px / 15px 10px no-repeat, linear-gradient(135deg, #FF1744 20%, transparent 20%) 45px 11px / 15px 10px no-repeat, black;
+            width: 80%;
+            height: 30%;
+            border-radius: 20px;
+            top: 25px;
+            left: 7px;
+        }
+
+        #ipod-player .buttons:after {
+            background: linear-gradient(-45deg, #FF1744 20%, transparent 20%) -5px 1px / 15px 10px no-repeat, linear-gradient(45deg, #FF1744 20%, transparent 20%) 10px 1px / 15px 10px no-repeat, linear-gradient(-135deg, #FF1744 20%, transparent 20%) -5px 45px / 15px 10px no-repeat, linear-gradient(135deg, #FF1744 20%, transparent 20%) 10px 45px / 15px 10px no-repeat, black;
+            width: 30%;
+            height: 80%;
+            border-radius: 20px;
+            top: 8px;
+            left: 25px;
+        }
+
+        #ipod-player .music-key {
+            background: black;
+            width: 2px;
+            height: 20px;
+            position: relative;
+            left: 210px;
+            top: -180px;
+        }
+
+        #ipod-player .music-key:before {
+            background: black;
+            width: 5px;
+            height: 10px;
+            transform: skew(10deg);
+            border-radius: 50%;
+            top: 10px;
+            left: -4px;
+        }
+
+        #ipod-player .music-key:after {
+            background: black;
+            width: 2px;
+            height: 10px;
+            transform: skew(10deg);
+            top: 0px;
+            left: 1px;
+        }
+
+        #ipod-player .two {
+            transform: rotateX(180deg);
+            position: relative;
+            top: -180px;
+            left: 30px;
+        }
+
+        #ipod-player .other-music-key {
+            background: black;
+            width: 2px;
+            height: 20px;
+            position: relative;
+            left: 20px;
+            box-shadow: 10px -7px 0;
+            top: -80px;
+        }
+
+        #ipod-player .other-music-key:before {
+            background: black;
+            width: 5px;
+            height: 10px;
+            transform: skew(-10deg);
+            border-radius: 50%;
+            top: 10px;
+            left: 1px;
+            box-shadow: 9px -5px 0;
+        }
+
+        #ipod-player .other-music-key:after {
+            background: black;
+            width: 11px;
+            height: 2px;
+            transform: rotate(-40deg);
+            top: -3px;
+        }
+
+        #ipod-player .three {
+            position: relative;
+            top: -150px;
+            transform: rotateX(180deg);
+            left: 210px;
+        }
+
+        #ipod-player .text {
+            display: inline-block;
+            margin: auto;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        #ipod-player .text span {
+            opacity: 0;
+            animation: ipod-typing .5s forwards;
+        }
+
+        @keyframes ipod-typing {
+            0%, 66% { opacity: 0; }
+            33%, 100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="fixed top-8 right-8 z-50 flex gap-8">
+        <span class="nav-item">
+            <button id="menu-button" type="button" aria-expanded="false" aria-controls="menu" class="grand-bold text-white text-sm tracking-wide cursor-pointer">Menu</button>
+        </span>
+        <span class="nav-item nav-english">
+            <button type="button" class="grand-bold text-white text-sm tracking-wide cursor-pointer">English</button>
+        </span>
+    </nav>
+
+    <section class="hero2">
+        <canvas id="hero-shader" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;mix-blend-mode:screen;opacity:1;pointer-events:none;"></canvas>
+        <h1 class="sr-only">Lulú Tanguera</h1>
+        <div class="hero2-scene">
+            <div class="hero2-bg active" style="background-image:url('lulublancoynegro.jpg')"></div>
+            <div class="hero2-bg" style="background-image:url('lulu-biografia-opt.jpg'); background-position:center top; top:0; transform:scale(1.35); transform-origin:top center;"></div>
+            <div class="hero2-bg" style="background-image:url('lulu7.jpg')"></div>
+        </div>
+        <div class="absolute inset-0 bg-[rgb(189_0_0)] mix-blend-multiply"></div>
+        <div class="md:ms-8 hero2-title grand-heavy text-white flex flex-col text-[4.5rem] md:text-[15rem] leading-none">
+            <span class="word" aria-hidden="true">
+                <span class="letter"><span class="clip"><span>L</span></span></span>
+                <span class="letter"><span class="clip"><span>u</span></span></span>
+                <span class="letter"><span class="clip"><span>l</span></span></span>
+                <span class="letter"><span class="clip"><span>ú</span></span></span>
+            </span>
+            <span class="ms-[4px] mt-[-20px] md:ms-[14px] md:mt-[-70px] word text-[2rem] md:text-[6rem]" aria-hidden="true">
+                <span class="letter"><span class="clip"><span>T</span></span></span>
+                <span class="letter"><span class="clip"><span>a</span></span></span>
+                <span class="letter"><span class="clip"><span>n</span></span></span>
+                <span class="letter"><span class="clip"><span>g</span></span></span>
+                <span class="letter"><span class="clip"><span>u</span></span></span>
+                <span class="letter"><span class="clip"><span>e</span></span></span>
+                <span class="letter"><span class="clip"><span>r</span></span></span>
+                <span class="letter"><span class="clip"><span>a</span></span></span>
+            </span>
+            <div class="hero2-actions">
+                <button id="enter-sound" type="button" class="grand-bold text-white text-sm tracking-wide cursor-pointer">Entrar con sonido</button>
+                <button id="enter-muted" type="button" class="grand-bold text-white text-sm tracking-wide cursor-pointer">Entrar sin sonido</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre-lulu" class="sobre-section">
+        <div class="stage">
+            <img class="stage-bg" src="lulu4-opt.jpg" alt="">
+            <div class="stage-content">
+                <h2 class="grand-heavy stage-title">Lulú Tanguera</h2>
+                <p class="regular"><span class="grand-bold">Lulú Tanguera </span> es cantante, actriz e intérprete porteña con más de dos décadas de trayectoria. Desde sus raíces en La Boca construye un universo propio donde el tango se cruza con la actuación, el humor, la sensualidad y la irreverencia.</p>
+                <p class="regular">Ahijada artística de Tita Merello, recoge el linaje de las grandes intérpretes populares argentinas para transformarlo en un lenguaje personal, arrabalero y contemporáneo. Su discografía y sus espectáculos recorren más de veinte años de una artista en permanente movimiento.</p>
+ 
+            </div>
+                <a href="https://open.spotify.com/intl-es/album/1J48RRsoHRqSSv0IkoWeec?si=okCt8viQTD-u05g86r3aBQ" target="_blank" class="grand-bold stage-link">Dale Play</a>
+                <a href="biografia.html" class="grand-bold stage-link">Bio Completa</a>
+                <a href="#discografia" class="grand-bold stage-link">Podrán?</a>
+                <a href="#discografia" class="grand-bold stage-link">Lulú Novedades</a>
+                <a href="#contacto" class="grand-bold stage-link">Contacto</a>
+                <div id="wrap">
+            <div id="album">
+                <div id="cover">
+                    <div id="print">
+                    </div>
+                </div>
+                <div id="vinyl">
+                    <div id="print">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+#wrap {
+	background-color: rgba(0,0,0,0.8);	
+}
+#album {
+	position: absolute;
+	left: 13%;
+	bottom: calc(21% + 2.5rem);
+	height: 10vw;
+	width: 10%;
+	max-height: 15%;
+	max-width: 15vh;
+}
+#cover {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	background-image: url('lulu-podran.jpg');
+	background-size: 100% 100%;
+	box-shadow: 5px 0 20px 0 rgba(0,0,0,0.6),
+	            inset 0 0 10px 5px rgba(255,255,255,0.2),
+			  inset 0 0 4px 2px rgba(0,0,0,0.2);
+	border-radius: 4px;
+	&::before {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 10;
+		width: 100%;
+		height: 100%;
+		background-image: url('http://i.imgur.com/i0fMWpe.jpg');
+		background-size: 100% 100%;
+		border-radius: 4px;
+		mix-blend-mode: screen;
+		opacity: 0.5;
+		content: '';
+	}
+	&::after {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 20;
+		width: 100%;
+		height: 100%;
+		background-image: url('lulu-podran.jpg');
+		background-size: 100% 100%;
+		border-radius: 4px;
+		mix-blend-mode: screen;
+		opacity: 0.2;
+		content: '';
+	}
+}
+#vinyl {
+		position: absolute;
+		top: 2.5%;
+		left: 2.5%;
+		z-index: 0;
+		width: 95%;
+		height: 95%;
+		display: block;
+		background-image: url('https://gallery.yopriceville.com/var/resizes/Free-Clipart-Pictures/Music-PNG/Gramophone_Vinyl_LP_Record_PNG_Transparent_Clip_Art_Image.png?m=1462983196');
+		background-size: 106% 106%;
+		background-position: center;
+		box-shadow: 0 0 20px 4px rgba(0,0,0,0.6);
+		border-radius: 50%;
+		content: '';
+		animation: 5s linear spinThat infinite, 1s ease-out getOut 1s forwards;
+		&::before {
+			position: absolute;
+			top: 2.5%;
+			left: 2.5%;
+			z-index: 10;
+			width: 95%;
+			height: 95%;
+			background-image: url('http://www.designresourcebox.com/ths/diverse/blacktextures/82267467.jpg');
+			background-size: 100% 100%;
+			border-radius: 50%;
+			mix-blend-mode: screen;
+			opacity: 0.3;
+			content: '';
+		}
+		#print {
+			position: absolute;
+			top: 33%;
+			left: 33%;
+			height: 34%;
+			width: 34%;
+			box-shadow: inset 0 0 0 5px rgba(150,150,150,0.5);
+			background-image: url('http://assets.teamrock.com/image/14d29742-c6f7-43f6-bbe1-6bf7b3b34c6f?w=800');
+	background-size: cover;
+			border-radius: 50%;
+		}
+}
+
+@keyframes getOut {
+	0% {
+		left: 0;
+	}
+	100% {
+		left: 50%;
+	}
+}
+@keyframes spinThat {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+#vinyl {
+	animation-play-state: paused;
+}
+#album.play #vinyl {
+	animation-play-state: running;
+}
+</style>
+
+    <section class="h-[100dvh] w-[100dvw] bg-[#ba0600]"></section>
+
+    <section id="contacto" class="dots-section">
+        <div class="dots-bg" aria-hidden="true"></div>
+        <div class="dots-lulu-tile" aria-hidden="true"></div>
+        <div class="dots-links grand-heavy absolute left-8 top-[150px] max-md:top-[60px] z-10 flex flex-col items-start gap-2">
+            <a class="dot" href="#contacto"><span>Representante</span></a>
+            <a class="dot" href="https://www.instagram.com/lulutanguera/?hl=en" target="_blank"><span>Instagram</span></a>
+            <a class="dot" href="https://open.spotify.com/intl-es/artist/5LBBLZ1QQ5Z3ug09QlgQDI?si=JN4ZGvWnTOe5SSWAvX1NMA" target="_blank"><span>Spotify</span></a>
+            <a id="colabora-trigger" class="dot" href="#"><span>MercadoPago (para colaborar)</span></a>
+            <a class="dot" href="#"><span>Newsletter</span></a>
+        </div>
+    </section>
+
+    <div id="menu" class="grand-heavy">
+        <div class="menu-scene"><div class="menu-bg"></div></div>
+        <div class="dots-bg" aria-hidden="true"></div>
+        <div class="menu-grid">
+            <a class="dot" href="#inicio"><span>Inicio</span></a>
+            <a class="dot" href="#sobre-lulu"><span>Sobre Lulú</span></a>
+            <a class="dot" href="/biografia.html"><span>Biografía</span></a>
+            <a class="dot" href="#discografia"><span>Discografía</span></a>
+            <a class="dot" href="#escena"><span>Escena</span></a>
+            <a class="dot" href="#escenarios-y-giras"><span>Escenarios y Giras</span></a>
+            <a class="dot" href="#prensa"><span>Prensa</span></a>
+            <a class="dot" href="#ver-a-lulu"><span>Ver a Lulú</span></a>
+            <a class="dot" href="#podran"><span>¿Podrán?</span></a>
+            <a class="dot" href="#contacto"><span>Contacto</span></a>
+            <a class="dot menu-english" href="#"><span>English</span></a>
+        </div>
+    </div>
+
+    <div id="colabora-modal" class="grand-heavy fixed inset-0 z-[100] hidden place-items-center bg-black/80 p-6">
+        <div class="relative max-w-lg bg-black px-8 py-10 text-center ring-2 ring-[#ba0600]">
+            <p class="text-xl leading-snug text-white md:text-2xl">Podés colaborar con Lulú Tanguera al alias</p>
+            <p class="mt-4 text-2xl text-[#ba0600] md:text-3xl">lulutanguera</p>
+            <button id="colabora-close" type="button" class="grand-bold mt-8 cursor-pointer bg-[#ba0600] px-[0.6em] py-[0.25em] text-sm tracking-wide text-white hover:bg-[#8a0500]">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script>
+        gsap.set(".clip", { transformOrigin: "50% 100%" });
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.set("nav button", { y: -60, autoAlpha: 0 });
+        }
+
+        document.fonts.ready.then(() => {
+            const moves = [
+                { clip: { rotationX: -180, ease: "back.out(1.7)" }, span: { yPercent: 150 } },
+                { clip: { rotationY: -180, ease: "back.out(1.7)" }, span: { yPercent: 150 } },
+                { clip: { rotation: -180, ease: "back.out(1.7)" }, span: { xPercent: -110 } },
+                { clip: { rotationX: -360, ease: "power3.out", duration: 1.2 }, span: { yPercent: -150 } },
+                { clip: { scale: 0, ease: "back.out(1.7)" }, span: { yPercent: 150 } },
+                { clip: { rotationY: -360, ease: "power3.out", duration: 1.2 }, span: { xPercent: 110 } },
+                { clip: { rotationZ: 180, ease: "back.out(1.7)" }, span: { yPercent: 150 } },
+                { clip: { rotationX: 180, transformOrigin: "50% 0%", ease: "back.out(1.7)" }, span: { yPercent: -150 } },
+                { clip: { skewX: 25, x: -50, ease: "back.out(1.6)" }, span: { yPercent: 150 } },
+                { clip: { scale: 0, rotation: 90, ease: "back.out(2)" }, span: { yPercent: 150 } },
+                { clip: { rotationX: -450, ease: "power3.out", duration: 1.3 }, span: { yPercent: 150 } },
+                { clip: { rotationY: -180, scale: 0, ease: "back.out(1.7)" }, span: { yPercent: 150 } },
+            ];
+
+            const letters = gsap.utils
+                .toArray(".letter")
+                .filter((l) => l.getClientRects().length);
+            const intro = gsap.timeline({ onComplete: startCrossfades });
+
+            letters.forEach((letter, i) => {
+                const clip = letter.querySelector(".clip");
+                const glyph = letter.querySelector(".clip > span");
+                const m = moves[i % moves.length];
+                const at = i * 0.12;
+
+                intro.from(clip, { duration: 1, ...m.clip }, at);
+                intro.from(glyph, { duration: 0.7, ...m.span }, at);
+            });
+
+            if (!letters.length) {
+                startCrossfades();
+            } else {
+                setTimeout(
+                    startCrossfades,
+                    (letters.length - 1) * 120 + 1400
+                );
+            }
+        });
+
+        function crossfade(selector) {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+            const layers = document.querySelectorAll(selector);
+            if (!layers.length) return;
+            let idx = 0;
+            setInterval(() => {
+                layers[idx].classList.remove("active");
+                idx = (idx + 1) % layers.length;
+                layers[idx].classList.add("active");
+            }, 2000);
+        }
+
+        let crossfadeStarted = false;
+        function startCrossfades() {
+            if (crossfadeStarted) return;
+            crossfadeStarted = true;
+            crossfade(".hero2-bg");
+
+            if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                gsap.to("nav button", {
+                    y: 0,
+                    autoAlpha: 1,
+                    duration: 0.6,
+                    ease: "power3.out",
+                    stagger: 0.12,
+                });
+            }
+        }
+
+        document.querySelectorAll(".stage-title").forEach((el) => {
+            const text = el.textContent.trim();
+            el.textContent = "";
+            [...text].forEach((ch) => {
+                const span = document.createElement("span");
+                span.className = "stage-letter";
+                span.textContent = ch === " " ? "\u00A0" : ch;
+                el.appendChild(span);
+            });
+        });
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            function makePendulum(elements, container, opts) {
+                if (!elements.length || !container) return null;
+                gsap.set(elements, { transformOrigin: "50% 0%" });
+                return {
+                    elements,
+                    container,
+                    cfg: { radius: 200, maxAngle: 26, sensitivity: 320, ...opts },
+                    active: (opts && opts.active) || (() => true),
+                    state: elements.map(() => ({ a: 0, v: 0 })),
+                    target: elements.map(() => 0),
+                };
+            }
+
+            const menuEl = document.getElementById("menu");
+
+            const pendulums = [
+                makePendulum(
+                    gsap.utils.toArray(".hero2-title .letter"),
+                    document.querySelector(".hero2-title")
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".stage-title .stage-letter"),
+                    document.querySelector(".stage-content")
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".stage-link"),
+                    document.querySelector(".stage"),
+                    { radius: 150, maxAngle: 16, sensitivity: 220 }
+                ),
+                makePendulum(
+                    gsap.utils.toArray("#album"),
+                    document.querySelector(".stage"),
+                    { radius: 150, maxAngle: 16, sensitivity: 220 }
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".nav-item"),
+                    document.querySelector("nav"),
+                    { radius: 150, maxAngle: 16, sensitivity: 220 }
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".hero2-actions button"),
+                    document.querySelector(".hero2-actions"),
+                    { radius: 150, maxAngle: 16, sensitivity: 220 }
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".menu-grid .dot"),
+                    document.querySelector(".menu-grid"),
+                    {
+                        radius: 150,
+                        maxAngle: 16,
+                        sensitivity: 220,
+                        active: () => menuEl.classList.contains("open"),
+                    }
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".dots-links .dot"),
+                    document.querySelector(".dots-links"),
+                    { radius: 150, maxAngle: 16, sensitivity: 220 }
+                ),
+            ].filter(Boolean);
+
+            window.addEventListener("mousemove", (e) => {
+                pendulums.forEach((p) => {
+                    if (!p.active()) {
+                        p.target.fill(0);
+                        return;
+                    }
+                    const base = p.container.getBoundingClientRect();
+                    p.elements.forEach((el, i) => {
+                        const cx =
+                            base.left + el.offsetLeft + el.offsetWidth / 2;
+                        const cy =
+                            base.top + el.offsetTop + el.offsetHeight / 2;
+                        const dx = e.clientX - cx;
+                        const dist = Math.hypot(dx, e.clientY - cy);
+                        const falloff = Math.max(0, 1 - dist / p.cfg.radius);
+                        p.target[i] =
+                            gsap.utils.clamp(
+                                -p.cfg.maxAngle,
+                                p.cfg.maxAngle,
+                                (dx / p.cfg.sensitivity) * p.cfg.maxAngle
+                            ) *
+                            (falloff * falloff);
+                    });
+                });
+            });
+
+            gsap.ticker.add(() => {
+                pendulums.forEach((p) => {
+                    p.elements.forEach((el, i) => {
+                        const s = p.state[i];
+                        s.v += (p.target[i] - s.a) * 0.1;
+                        s.v *= 0.88;
+                        s.a += s.v;
+                        el.style.transform = `rotate(${s.a}deg)`;
+                    });
+                });
+            });
+        }
+
+        function makeTilt(el, sceneSel, cfg) {
+            const scene = el && el.querySelector(sceneSel);
+            if (!scene) return;
+            const c = { maxX: 7, maxY: 12, ease: 0.1, damp: 0.7, ...cfg };
+            let tx = 0,
+                ty = 0,
+                cx = 0,
+                cy = 0,
+                vx = 0,
+                vy = 0;
+
+            el.addEventListener("mousemove", (e) => {
+                if (c.active && !c.active()) return;
+                const r = el.getBoundingClientRect();
+                const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+                const ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+                tx = -ny * c.maxX;
+                ty = nx * c.maxY;
+            });
+            el.addEventListener("mouseleave", () => {
+                tx = 0;
+                ty = 0;
+            });
+
+            gsap.ticker.add(() => {
+                if (c.active && !c.active()) {
+                    tx = 0;
+                    ty = 0;
+                }
+                if (
+                    Math.abs(tx - cx) < 0.0001 &&
+                    Math.abs(ty - cy) < 0.0001 &&
+                    Math.abs(vx) < 0.0001 &&
+                    Math.abs(vy) < 0.0001
+                )
+                    return;
+                vx += (tx - cx) * c.ease;
+                vx *= c.damp;
+                cx += vx;
+                vy += (ty - cy) * c.ease;
+                vy *= c.damp;
+                cy += vy;
+                gsap.set(scene, { rotationX: cx, rotationY: cy });
+            });
+        }
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            makeTilt(document.querySelector(".hero2"), ".hero2-scene", {
+                maxX: 2,
+                maxY: 3,
+                ease: 0.045,
+                damp: 0.78
+            });
+            const menu3d = document.getElementById("menu");
+            if (menu3d) {
+makeTilt(menu3d, ".menu-scene", {
+                        maxX: 2,
+                        maxY: 3,
+                        ease: 0.045,
+                        damp: 0.78,
+                        active: () => menu3d.classList.contains("open"),
+                    });
+            }
+        }
+
+        const menu = document.getElementById("menu");
+        const menuButton = document.getElementById("menu-button");
+        function buildDots() {
+            document.querySelectorAll(".dots-bg").forEach((bg) => {
+                const dot = parseFloat(
+                    getComputedStyle(bg).getPropertyValue("--dot")
+                );
+                const w = bg.clientWidth;
+                const h = bg.clientHeight;
+                if (!dot || !w || !h) return;
+
+                const cols = Math.ceil(w / dot);
+                const rows = Math.ceil(h / dot);
+
+                bg.style.gridTemplateColumns = `repeat(${cols}, ${dot}px)`;
+                bg.style.gridAutoRows = `${dot}px`;
+
+                const frag = document.createDocumentFragment();
+                for (let i = 0; i < cols * rows; i++) {
+                    frag.appendChild(document.createElement("div")).className =
+                        "dot-cell";
+                }
+                bg.replaceChildren(frag);
+            });
+        }
+
+        buildDots();
+        window.addEventListener("resize", buildDots);
+
+        function setMenu(open) {
+            menu.classList.toggle("open", open);
+            menuButton.setAttribute("aria-expanded", String(open));
+            menuButton.textContent = open ? "Cerrar" : "Menu";
+            document.body.classList.toggle("nav-open", open);
+        }
+
+        menuButton.addEventListener("click", () =>
+            setMenu(!menu.classList.contains("open"))
+        );
+        menu.querySelectorAll("a").forEach((a) =>
+            a.addEventListener("click", () => setMenu(false))
+        );
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") setMenu(false);
+        });
+
+        const albumEl = document.getElementById("album");
+        const sobreSection = document.getElementById("sobre-lulu");
+        if (albumEl && sobreSection && "IntersectionObserver" in window) {
+            const albumObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            albumEl.classList.add("play");
+                            albumObserver.disconnect();
+                        }
+                    });
+                },
+                { threshold: 0.35 }
+            );
+            albumObserver.observe(sobreSection);
+        }
+    </script>
+
+    <div id="ipod-player" hidden>
+        <div class="ipod">
+            <div class="screen">
+                <div class="text"></div>
+            </div>
+            <div class="buttons"></div>
+        </div>
+        <div class="music-key"></div>
+        <div class="music-key two"></div>
+        <div class="other-music-key"></div>
+        <div class="other-music-key three"></div>
+    </div>
+
+    <audio id="hero-audio" preload="auto"></audio>
+
+    <script>
+      const enterSound = document.getElementById('enter-sound');
+      const enterMuted = document.getElementById('enter-muted');
+      const heroAudio = document.getElementById('hero-audio');
+      const sobreLulu = document.getElementById('sobre-lulu');
+      const ipodPlayer = document.getElementById('ipod-player');
+
+      const PLAYLIST = [
+        { src: 'canciones/lulu-unbesito.mp3', title: 'Un besito' },
+        { src: 'canciones/milonga.mp3', title: 'Milonga Lunfarda' },
+      ];
+      let trackIndex = 0;
+
+      // Precarga todos los tracks para que el cambio sea instantáneo (salen de cache)
+      const preloadPool = [];
+      PLAYLIST.forEach((track, i) => {
+        if (i === 0) return; // el track 0 lo carga el elemento principal
+        const a = document.createElement('audio');
+        a.preload = 'auto';
+        a.src = track.src;
+        a.load();
+        preloadPool.push(a);
+      });
+      if (heroAudio) heroAudio.src = PLAYLIST[0].src;
+
+      function renderIpodTitle(title) {
+        if (!ipodPlayer) return;
+        const text = ipodPlayer.querySelector('.text');
+        if (!text) return;
+        text.style.fontSize = `${Math.min(14, Math.max(9, Math.floor(110 / (title.length * 0.65))))}px`;
+        text.innerHTML = '';
+        [...title].forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.textContent = ch === ' ' ? '\u00A0' : ch;
+          span.style.animationDelay = `${(i * 0.12).toFixed(2)}s`;
+          text.appendChild(span);
+        });
+      }
+
+      function loadTrack(i, autoplay) {
+        trackIndex = (i + PLAYLIST.length) % PLAYLIST.length;
+        const track = PLAYLIST[trackIndex];
+        if (!heroAudio.src || !heroAudio.src.endsWith(track.src)) {
+          heroAudio.src = track.src;
+        }
+        renderIpodTitle(track.title);
+        if (autoplay) {
+          heroAudio.play().catch((e) => console.warn('[audio] no se pudo reproducir:', e));
+        }
+      }
+
+      function enterLulu(play) {
+        if (ipodPlayer) ipodPlayer.hidden = false;
+        if (play && heroAudio) {
+          loadTrack(trackIndex, true);
+        } else {
+          renderIpodTitle('Sound off');
+        }
+        if (sobreLulu) {
+          sobreLulu.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      if (enterSound) enterSound.addEventListener('click', () => enterLulu(true));
+      if (enterMuted) enterMuted.addEventListener('click', () => enterLulu(false));
+
+      if (heroAudio) {
+        heroAudio.addEventListener('ended', () => loadTrack(trackIndex + 1, true));
+      }
+
+      if (ipodPlayer && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const MAX = 12;
+        let tx = 0, ty = 0, cx = 0, cy = 0;
+        window.addEventListener("mousemove", (e) => {
+          const nx = (e.clientX / window.innerWidth) * 2 - 1;
+          const ny = (e.clientY / window.innerHeight) * 2 - 1;
+          ty = nx * MAX;
+          tx = -ny * MAX;
+        });
+        gsap.ticker.add(() => {
+          cx += (tx - cx) * 0.06;
+          cy += (ty - cy) * 0.06;
+          ipodPlayer.style.transform = `perspective(700px) rotateX(${cx.toFixed(3)}deg) rotateY(${cy.toFixed(3)}deg) scale(0.8)`;
+        });
+      }
+
+      const ipodButtons = ipodPlayer ? ipodPlayer.querySelector('.buttons') : null;
+      if (ipodButtons && heroAudio) {
+        ipodButtons.style.cursor = 'pointer';
+        ipodButtons.addEventListener('click', (e) => {
+          const r = ipodButtons.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2);
+          const dy = e.clientY - (r.top + r.height / 2);
+          const dist = Math.hypot(dx, dy);
+          const radius = r.width / 2;
+
+          if (dist < radius * 0.35) {
+            if (heroAudio.paused) {
+              heroAudio.play().catch((err) => console.warn('[audio] no se pudo reproducir:', err));
+              renderIpodTitle(PLAYLIST[trackIndex].title);
+            } else {
+              heroAudio.pause();
+              renderIpodTitle('Sound off');
+            }
+            return;
+          }
+
+          if (Math.abs(dx) > Math.abs(dy)) {
+            loadTrack(trackIndex + (dx < 0 ? -1 : 1), true);
+          } else if (dy < 0) {
+            heroAudio.volume = Math.min(1, heroAudio.volume + 0.1);
+          } else {
+            heroAudio.volume = Math.max(0, heroAudio.volume - 0.1);
+          }
+        });
+      }
+
+      if (ipodPlayer && heroAudio) {
+        ipodPlayer.addEventListener('mouseenter', () => {
+          if (heroAudio.paused) renderIpodTitle('Click to play ...');
+        });
+        ipodPlayer.addEventListener('mouseleave', () => {
+          if (heroAudio.paused) renderIpodTitle('Sound off');
+        });
+      }
+    </script>
+
+    <script>
+      const colaboraModal = document.getElementById('colabora-modal');
+      const colaboraTrigger = document.getElementById('colabora-trigger');
+      const colaboraClose = document.getElementById('colabora-close');
+
+      function setColabora(open) {
+        if (!colaboraModal) return;
+        colaboraModal.classList.toggle('hidden', !open);
+        colaboraModal.classList.toggle('grid', open);
+      }
+
+      if (colaboraTrigger) {
+        colaboraTrigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          setColabora(true);
+        });
+      }
+      if (colaboraClose) {
+        colaboraClose.addEventListener('click', () => setColabora(false));
+      }
+      if (colaboraModal) {
+        colaboraModal.addEventListener('click', (e) => {
+          if (e.target === colaboraModal) setColabora(false);
+        });
+      }
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setColabora(false);
+      });
+    </script>
+
+    <script>
+      window.process = window.process || { env: { NODE_ENV: "production" } };
+    </script>
+
+    <script type="module">
+  import { createShader, isWebGPUSupported } from 'https://cdn.jsdelivr.net/npm/shaders@latest/dist/js/index.min.js';
+
+  if (!isWebGPUSupported()) {
+    console.warn("[shader] WebGPU no soportado en este navegador");
+  } else {
+    createShader(document.getElementById('hero-shader'), {
+      components: [
+        { type: 'SmokeFlow', id: 'smoke', props: { colorA: '#860d09', colorB: '#380200' } },
+      ],
+    })
+      .then(() => console.log("[shader] render OK (SmokeFlow)"))
+      .catch((e) => console.error("[shader] error:", e));
+  }
+</script>
+</body>
+</html>

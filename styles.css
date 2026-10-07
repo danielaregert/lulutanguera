@@ -1,0 +1,484 @@
+@font-face {
+    font-family: "PP Agrandir";
+    src: url("fonts/PPAgrandir-GrandHeavy.otf") format("opentype"),
+         url("fonts/PPAgrandir-GrandHeavy.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "PP Agrandir";
+    src: url("fonts/PPAgrandir-Bold.otf") format("opentype"),
+         url("fonts/PPAgrandir-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "PP Agrandir";
+    src: url("fonts/PPAgrandir-Regular.otf") format("opentype"),
+         url("fonts/PPAgrandir-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+.grand-heavy {
+    font-family: "PP Agrandir", sans-serif;
+    font-weight: 900 !important;
+}
+
+.grand-bold {
+    font-family: "PP Agrandir", sans-serif;
+    font-weight: 700;
+}
+
+.regular {
+    font-family: "PP Agrandir", sans-serif;
+    font-weight: 400;
+}
+
+.sobre-section {
+    position: relative;
+    width: 100dvw;
+    height: 100dvh;
+    overflow: hidden;
+    background: #000000;
+}
+
+.stage {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+}
+
+.stage-bg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.stage-content {
+    position: absolute;
+    top: 20%;
+    left: 3.3%;
+    width: 30%;
+    color: #ffffff;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.stage-title {
+    font-size: 1.15rem;
+    background: #ba0600;
+    display: inline-flex;
+}
+
+.stage-letter {
+    display: inline-block;
+}
+
+.stage-link {
+    color: #ffffff;
+    background: #ba0600;
+    padding: 0.25em 0.7em;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.stage-link:hover {
+    background: #8a0500;
+}
+
+@media (min-width: 768px) {
+    .stage-title {
+        font-size: clamp(1.15rem, 1.6cqw, 2rem);
+    }
+
+    .stage-link {
+        position: absolute;
+        z-index: 2;
+    }
+
+    .stage-link:nth-of-type(1) {
+        left: 15%;
+        bottom: 21%;
+    }
+
+    .stage-link:nth-of-type(2) {
+        left: 33%;
+        bottom: 10%;
+    }
+
+    .stage-link:nth-of-type(3) {
+        left: 55%;
+        bottom: 15%;
+    }
+
+    .stage-link:nth-of-type(4) {
+        left: 63%;
+        bottom: 45%;
+    }
+
+    .stage-link:nth-of-type(5) {
+        left: 73%;
+        bottom: 65%;
+    }
+}
+
+@media (max-width: 767px) {
+    .sobre-section {
+        height: auto;
+        min-height: 100dvh;
+    }
+
+    .stage {
+        position: relative;
+        inset: auto;
+        isolation: isolate;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        min-height: 100dvh;
+        padding: 3rem 1.5rem;
+    }
+
+    .stage-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .stage-content {
+        position: static;
+        align-self: stretch;
+        width: auto;
+        font-size: 1.05rem;
+        z-index: 1;
+    }
+
+    .stage-title {
+        font-size: 1.3rem;
+    }
+
+    .stage-link {
+        z-index: 1;
+    }
+}
+
+.word {
+    display: flex;
+}
+
+.letter {
+    display: inline-block;
+    position: relative;
+    perspective: 750px;
+}
+
+.clip {
+    display: inline-block;
+    overflow: hidden;
+    backface-visibility: hidden;
+    padding-bottom: 0.18em;
+    margin-bottom: -0.18em;
+}
+
+.clip > span {
+    display: inline-block;
+    will-change: transform;
+}
+
+.hero2 {
+    position: relative;
+    height: 100dvh;
+    width: 100dvw;
+    overflow: hidden;
+    background: #000000;
+    perspective: 1200px;
+}
+
+.hero2-scene {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.hero2-bg {
+    position: absolute;
+    inset: -12%;
+    background-size: cover;
+    background-position: top center;
+    transform: translateZ(-260px) scale(1.35);
+    opacity: 0;
+    transition: opacity 2s ease;
+    will-change: transform, opacity;
+}
+
+.hero2-bg.active {
+    opacity: 1;
+}
+
+.hero2-title {
+    position: absolute;
+    left: 1rem;
+    bottom: 4rem;
+    z-index: 3;
+}
+
+.hero2-actions {
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 3rem;
+}
+
+.hero2-actions button {
+    color: #ffffff;
+    background: #ba0600;
+    padding: 0.15em 0.4em;
+}
+
+.hero2-actions button:hover {
+    background: #8a0500;
+}
+
+#menu {
+    --dot: 150px;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow: hidden;
+    background: #000000;
+    perspective: 1200px;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 280ms ease-out, transform 280ms ease-out;
+}
+
+.menu-scene {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.menu-bg {
+    position: absolute;
+    inset: -12%;
+    background: url("lulu-2byn.jpg") center / cover no-repeat;
+    transform: translateZ(-260px) scale(1.35);
+    will-change: transform;
+}
+
+.dots-section {
+    --dot: 60px;
+    position: relative;
+    width: 100dvw;
+    height: 100dvh;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.dots-lulu {
+    position: absolute;
+    inset: auto 0 0 0;
+    margin: 0 auto;
+    height: 92%;
+    width: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    pointer-events: none;
+    user-select: none;
+}
+
+.dots-lulu-tile {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image: url('lulu-recortada-opt.png');
+    background-repeat: repeat;
+    background-size: 250px auto;
+    background-position: center bottom;
+    pointer-events: none;
+    user-select: none;
+}
+
+#menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dots-bg {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    pointer-events: none;
+}
+
+#menu .dots-bg {
+    display: none;
+}
+
+.dot-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dot);
+    height: var(--dot);
+}
+
+.dot-cell::before {
+    content: "";
+    width: 40%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #000000;
+}
+
+.menu-grid {
+    position: absolute;
+    top: var(--dot);
+    left: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.dot {
+    color: #ffffff;
+    font-size: 1.25rem;
+    line-height: 1.1;
+}
+
+.dot span {
+    display: inline-block;
+    background: #ba0600;
+    padding: 0.15em 0.4em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.dot:hover span {
+    background: #8a0500;
+}
+
+.menu-english {
+    display: none;
+}
+
+body.nav-open {
+    overflow: hidden;
+}
+
+nav button {
+    color: #ffffff;
+    background: #ba0600;
+    padding: 0.15em 0.4em;
+}
+
+@media (max-width: 767px) {
+    #menu {
+        --dot: 60px;
+    }
+
+    .dot {
+        font-size: 1rem;
+    }
+
+    .nav-english {
+        display: none;
+    }
+
+    .menu-english {
+        display: block;
+    }
+}
+
+/* Página de biografía */
+body.bio {
+    background: #000000;
+}
+
+.bio-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+}
+
+.bio-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 6rem 3rem 3rem;
+    color: #ffffff;
+}
+
+.bio-inner .stage-title {
+    position: static;
+    width: auto;
+    margin-bottom: 1.5rem;
+    z-index: 2;
+}
+
+.bio-back {
+    display: inline-block;
+    color: #ffffff;
+    background: #ba0600;
+    padding: 0.15em 0.4em;
+}
+
+.bio-back:hover {
+    background: #8a0500;
+}
+
+@media (max-width: 767px) {
+    .bio-inner {
+        padding: 5rem 1.25rem 3rem;
+    }
+}
+
+.tray-swiper,
+.disco-swiper {
+    padding-bottom: 0.5rem;
+}
+
+.tray-pagination,
+.disco-pagination {
+    position: static;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+}
+
+.tray-pagination .swiper-pagination-bullet,
+.disco-pagination .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    margin: 0 !important;
+    background: #ffffff;
+    opacity: 0.35;
+}
+
+.tray-pagination .swiper-pagination-bullet-active,
+.disco-pagination .swiper-pagination-bullet-active {
+    background: #ba0600;
+    opacity: 1;
+}
+
+.bio-scroll,
+.bio-sticky,
+.bio-panel {
+    position: relative;
+}
