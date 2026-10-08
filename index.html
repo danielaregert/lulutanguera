@@ -192,9 +192,9 @@
         <canvas id="hero-shader" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;mix-blend-mode:screen;opacity:1;pointer-events:none;"></canvas>
         <h1 class="sr-only">Lulú Tanguera</h1>
         <div class="hero2-scene">
-            <div class="hero2-bg active" style="background-image:url('lulublancoynegro.jpg')"></div>
+            <div class="hero2-bg active" style="background-image:url('lulublancoynegro-opt.jpg')"></div>
             <div class="hero2-bg" style="background-image:url('lulu-biografia-opt.jpg'); background-position:center top; top:0; transform:scale(1.35); transform-origin:top center;"></div>
-            <div class="hero2-bg" style="background-image:url('lulu7.jpg')"></div>
+            <div class="hero2-bg" style="background-image:url('lulu7-opt.jpg')"></div>
         </div>
         <div class="absolute inset-0 bg-[rgb(189_0_0)] mix-blend-multiply"></div>
         <div class="md:ms-8 hero2-title grand-heavy text-white flex flex-col text-[4.5rem] md:text-[15rem] leading-none">
@@ -223,7 +223,7 @@
 
     <section id="sobre-lulu" class="sobre-section">
         <div class="stage">
-            <img class="stage-bg" src="lulu8.jpg" alt="">
+            <img class="stage-bg" src="lulu8-opt.jpg" alt="">
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" aria-hidden="true"></div>
             <div class="stage-content">
                 <h2 class="grand-heavy stage-title">Lulú Tanguera</h2>
@@ -372,10 +372,377 @@
 }
 </style>
 
+<style>
+    /* ===== Discografía: espiral + popup ===== */
+    @property --progress {
+        syntax: "<number>";
+        inherits: true;
+        initial-value: 0;
+    }
+
+    @property --card-currentness {
+        syntax: "<number>";
+        inherits: true;
+        initial-value: 0;
+    }
+
+    @property --wipe {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 0%;
+    }
+
+    #discografia {
+        position: relative;
+        width: 100dvw;
+        height: 300dvh;
+        background: #000000;
+    }
+
+    #discografia .discografia-sticky {
+        position: sticky;
+        top: 0;
+        width: 100dvw;
+        height: 100dvh;
+        overflow: hidden;
+        background: #000000;
+    }
+
+    #discografia .discografia-title {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 20;
+        padding: 2.75rem 2rem;
+        color: #ffffff;
+        line-height: 1;
+        pointer-events: none;
+    }
+
+    #discografia .spiral {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        perspective: 850px;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        pointer-events: none;
+
+        --progress: 0;
+        --spiral-radius: min(300px, 50vw);
+        --card-width: min(140px, 30vw);
+        --card-radius: 5px;
+        --card-img-radius: 5px;
+        --card-secondary-opacity: 0.5;
+        --card-spacing: max(80px, 5vw);
+        --card-angle-spacing: 35deg;
+
+        --cards-per-turn: calc(360deg / var(--card-angle-spacing));
+        --card-pitch: calc(var(--cards-per-turn) * var(--card-spacing));
+        --card-half-pitch: calc(var(--card-pitch) / 2);
+    }
+
+    #discografia .strand {
+        --strand: 0;
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+    }
+
+    #discografia .strand.strand-secondary {
+        --strand: 1;
+    }
+
+    #discografia .card {
+        --i: calc(sibling-index() - 1);
+        --strand-count: sibling-count();
+
+        --card-current: calc(var(--progress) * (var(--strand-count) - 1));
+        --card-position: calc(var(--i) - var(--card-current));
+        --card-currentness: clamp(0, calc(1 - abs(var(--card-position)) * 2), 1);
+        --card-half-turn: calc(var(--strand) * 0.5);
+        --card-vertical-offset: calc(var(--strand) * var(--card-half-pitch));
+        --card-angle: calc((var(--card-position) - var(--card-half-turn)) * var(--card-angle-spacing));
+        --card-y: calc(var(--card-position) * var(--card-spacing) - var(--card-vertical-offset));
+        --card-x: calc(sin(var(--card-angle)) * var(--spiral-radius));
+        --card-z: calc(cos(var(--card-angle)) * var(--spiral-radius));
+        --card-depth: cos(var(--card-angle));
+        --card-depth-factor: calc((var(--card-depth) + 1) / 2);
+        --card-scale: calc(0.6 + 0.4 * var(--card-depth-factor));
+        --strand-opacity: calc(1 - var(--strand) * (1 - var(--card-secondary-opacity)));
+        --card-opacity: calc((0.1 + 0.9 * var(--card-depth-factor)) * var(--strand-opacity));
+
+        margin: 0;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        width: var(--card-width);
+        aspect-ratio: 1 / 1;
+        border-radius: var(--card-radius);
+        opacity: var(--card-opacity);
+        transform-style: preserve-3d;
+        transform: translateX(var(--card-x)) translateY(var(--card-y)) translateZ(var(--card-z)) rotateY(var(--card-angle)) scale(var(--card-scale));
+        cursor: pointer;
+        pointer-events: auto;
+    }
+
+    @supports not (sibling-index()) {
+        #discografia .card:nth-child(1)  { --i: 0; }
+        #discografia .card:nth-child(2)  { --i: 1; }
+        #discografia .card:nth-child(3)  { --i: 2; }
+        #discografia .card:nth-child(4)  { --i: 3; }
+        #discografia .card:nth-child(5)  { --i: 4; }
+        #discografia .card:nth-child(6)  { --i: 5; }
+        #discografia .card:nth-child(7)  { --i: 6; }
+        #discografia .card:nth-child(8)  { --i: 7; }
+        #discografia .card:nth-child(9)  { --i: 8; }
+        #discografia .card:nth-child(10) { --i: 9; }
+        #discografia .card:nth-child(11) { --i: 10; }
+
+        #discografia .card {
+            --strand-count: 11;
+        }
+    }
+
+    #discografia .card img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: var(--card-img-radius);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+
+    #discografia .card figcaption {
+        position: absolute;
+        inset: auto 0 0 1em;
+        z-index: 0;
+        color: #ffffff;
+        white-space: nowrap;
+        opacity: var(--card-currentness);
+        transform: translateY(calc((1 + var(--card-currentness)) * 1em));
+        pointer-events: none;
+    }
+
+    #discografia .strand-secondary .card figcaption {
+        display: none;
+    }
+
+    #discografia .scroll {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        translate: -50% 0;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        color: #ffffff;
+        font-size: 0.8rem;
+        pointer-events: none;
+    }
+
+    #discografia .scroll-hint {
+        display: inline-block;
+        color: #ba0600;
+        animation: discografia-scroll-bounce 1.5s infinite ease-in-out;
+    }
+
+    @keyframes discografia-scroll-bounce {
+        50% {
+            translate: 0 10px;
+        }
+    }
+
+    /* ===== Popup de disco (overlay fullscreen) ===== */
+    .disco-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        overflow: hidden;
+    }
+
+    .disco-modal[hidden] {
+        display: none;
+    }
+
+    .disco-modal-bg {
+        position: absolute;
+        inset: 0;
+        --wipe: 0%;
+        background: url('lulu6byn-opt.jpg') center / cover no-repeat;
+        filter: grayscale(1);
+        -webkit-mask-image: linear-gradient(45deg, #000 calc(var(--wipe) + 0.4%), rgba(0, 0, 0, 0) var(--wipe));
+        mask-image: linear-gradient(45deg, #000 calc(var(--wipe) + 0.4%), rgba(0, 0, 0, 0) var(--wipe));
+    }
+
+    .disco-modal-close {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        z-index: 3;
+        display: inline-block;
+        border: 0;
+        background: #ba0600;
+        color: #ffffff;
+        padding: 0.15em 0.4em;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .disco-modal-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    .disco-modal-btn {
+        color: #ffffff;
+        background: #ba0600;
+        padding: 0.15em 0.4em;
+    }
+
+    .disco-modal-btn:hover,
+    .disco-modal-close:hover {
+        background: #8a0500;
+    }
+
+    .disco-modal-content {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+        gap: 4rem;
+        padding: 8vh 7vw;
+        pointer-events: none;
+    }
+
+    .disco-modal-media,
+    .disco-modal-text {
+        pointer-events: auto;
+    }
+
+    .disco-modal-media {
+        justify-self: center;
+        width: min(100%, 460px);
+        padding: 0.75rem;
+        background: #ba0600;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+        will-change: clip-path;
+    }
+
+    .disco-modal-img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+
+    .disco-modal-text {
+        color: #000000;
+    }
+
+    .disco-modal-year {
+        margin: 0 0 0.25rem;
+        color: #ffffff;
+        line-height: 1;
+    }
+
+    .disco-modal-title {
+        display: inline-flex;
+        max-width: 100%;
+        margin: 0 0 1.5rem;
+        color: #000000;
+        line-height: 1.1;
+    }
+
+    .disco-modal-title .w {
+        position: relative;
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .disco-modal-title .w-bg {
+        position: absolute;
+        inset: -0.06em -0.18em;
+        z-index: 0;
+        background: #ffffff;
+        transform-origin: left center;
+    }
+
+    .disco-modal-title .w-tx {
+        position: relative;
+        z-index: 1;
+        display: block;
+    }
+
+    .disco-modal-desc {
+        max-width: 36ch;
+        margin: 0;
+        color: #ffffff;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+        .disco-modal-content {
+            grid-template-columns: 1fr;
+            align-content: center;
+            gap: 2rem;
+            padding: 6rem 1.5rem 3rem;
+        }
+
+        .disco-modal-media {
+            width: min(70vw, 300px);
+        }
+    }
+</style>
+
+    <section id="discografia">
+        <div class="discografia-sticky">
+            <canvas id="discografia-shader" class="absolute inset-0 h-full w-full"></canvas>
+            <h1 class="discografia-title pendulum-title md:ms-8 grand-heavy text-2xl md:text-3xl">Discografía</h1>
+
+            <div class="spiral">
+                <div class="strand strand-primary">
+                    <figure class="card"><img src="discos/2026-podran.jpg" alt="¿Podrán?"><figcaption class="text-xs md:text-sm">2026 — ¿Podrán?</figcaption></figure>
+                    <figure class="card"><img src="discos/2026-soy-una-yegua.jpg" alt="Soy una Yegua"><figcaption class="text-xs md:text-sm">2026 — Soy una Yegua</figcaption></figure>
+                    <figure class="card"><img src="discos/2024-un-besito.jpg" alt="Un Besito"><figcaption class="text-xs md:text-sm">2024 — Un Besito</figcaption></figure>
+                    <figure class="card"><img src="discos/2023-la-colabella.jpg" alt="La Colabella"><figcaption class="text-xs md:text-sm">2023 — La Colabella</figcaption></figure>
+                    <figure class="card"><img src="discos/2023-lulu-3000.jpg" alt="Lulú 3000"><figcaption class="text-xs md:text-sm">2023 — Lulú 3000</figcaption></figure>
+                    <figure class="card"><img src="discos/2022-caliente-caliente.jpg" alt="Caliente Caliente"><figcaption class="text-xs md:text-sm">2022 — Caliente Caliente</figcaption></figure>
+                    <figure class="card"><img src="discos/2021-fiesta.jpg" alt="Fiesta"><figcaption class="text-xs md:text-sm">2021 — Fiesta</figcaption></figure>
+                    <figure class="card"><img src="discos/2017-me-enamore-una-vez.jpg" alt="Me enamoré una vez"><figcaption class="text-xs md:text-sm">2017 — Me enamoré una vez</figcaption></figure>
+                    <figure class="card"><img src="discos/2007-argentina-flor-de-mina.jpg" alt="Argentina... flor de mina"><figcaption class="text-xs md:text-sm">2007 — Argentina... flor de mina</figcaption></figure>
+                    <figure class="card"><img src="discos/2004-al-gran-pueblo.jpg" alt="Al gran pueblo argentino... Lulú"><figcaption class="text-xs md:text-sm">2004 — Al gran pueblo argentino... Lulú</figcaption></figure>
+                    <figure class="card"><img src="discos/2001-tanto-gusto.jpg" alt="Tanto gusto... no hay de qué"><figcaption class="text-xs md:text-sm">2001 — Tanto gusto... no hay de qué</figcaption></figure>
+                </div>
+                <div class="strand strand-secondary" aria-hidden="true">
+                    <figure class="card"><img src="discos/2026-podran.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2026-soy-una-yegua.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2024-un-besito.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2023-la-colabella.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2023-lulu-3000.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2022-caliente-caliente.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2021-fiesta.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2017-me-enamore-una-vez.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2007-argentina-flor-de-mina.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2004-al-gran-pueblo.jpg" alt=""></figure>
+                    <figure class="card"><img src="discos/2001-tanto-gusto.jpg" alt=""></figure>
+                </div>
+            </div>
+
+            <p class="scroll">scroll <span class="scroll-hint">↓</span></p>
+        </div>
+    </section>
+
     <section id="novedades" class="relative grid h-[100dvh] w-[100dvw] grid-cols-2 overflow-hidden bg-[#ba0600]">
         <canvas id="magnetic-shader" class="absolute inset-0 h-full w-full"></canvas>
         <div class="md:ms-8 pointer-events-none relative z-10 flex flex-col items-start justify-start p-8">
-            <h2 class="pt-3 grand-heavy text-[2.5rem] leading-none text-white md:text-[4rem]">Novedades</h2>
+            <h2 class="pendulum-title relative pt-3 grand-heavy text-[2.5rem] leading-none text-white md:text-[4rem]">Novedades</h2>
             <p class="grand-bold mt-6 max-w-md  leading-tight text-white ">26 de noviembre</p>
             <p class="grand-heavy text-2xl md:text-4xl text-white">Lanzamiento de nuevo disco</p>
             <p class="regular text-white">En Club Social 911</p>
@@ -425,6 +792,25 @@
             <p class="text-xl leading-snug text-white md:text-xl">podés colaborar a su alias:</p>
             <p class="mt-4 text-2xl text-[#ba0600] md:text-3xl grand-heavy">lulutanguera</p>
             <button id="colabora-close" type="button" class="grand-bold mt-8 cursor-pointer bg-[#ba0600] px-[0.6em] py-[0.25em] text-sm tracking-wide text-white hover:bg-[#8a0500]">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="disco-modal" class="disco-modal" hidden>
+        <div class="disco-modal-bg" aria-hidden="true"></div>
+        <button class="disco-modal-close grand-bold text-white text-sm tracking-wide cursor-pointer" type="button">Cerrar</button>
+        <div class="disco-modal-content" role="dialog" aria-modal="true" aria-labelledby="disco-modal-title">
+            <div class="disco-modal-media">
+                <img id="disco-modal-img" class="disco-modal-img" src="" alt="">
+            </div>
+            <div class="disco-modal-text">
+                <p id="disco-modal-year" class="disco-modal-year heavy-bold text-sm md:text-base"></p>
+                <h2 id="disco-modal-title" class="disco-modal-title grand-heavy text-xl md:text-2xl lg:text-3xl"></h2>
+                <p id="disco-modal-desc" class="disco-modal-desc regular text-sm md:text-base lg:text-lg"></p>
+                <div class="disco-modal-actions">
+                    <button class="disco-modal-btn grand-bold text-white text-sm tracking-wide cursor-pointer" type="button" data-dir="-1">Anterior</button>
+                    <button class="disco-modal-btn grand-bold text-white text-sm tracking-wide cursor-pointer" type="button" data-dir="1">Siguiente</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -506,7 +892,7 @@
             }
         }
 
-        document.querySelectorAll(".stage-title").forEach((el) => {
+        document.querySelectorAll(".stage-title, .pendulum-title").forEach((el) => {
             const text = el.textContent.trim();
             el.textContent = "";
             [...text].forEach((ch) => {
@@ -541,6 +927,14 @@
                 makePendulum(
                     gsap.utils.toArray(".stage-title .stage-letter"),
                     document.querySelector(".stage-content")
+                ),
+                makePendulum(
+                    gsap.utils.toArray(".discografia-title .stage-letter"),
+                    document.querySelector(".discografia-title")
+                ),
+                makePendulum(
+                    gsap.utils.toArray("#novedades h2 .stage-letter"),
+                    document.querySelector("#novedades h2")
                 ),
                 makePendulum(
                     gsap.utils.toArray(".stage-link"),
@@ -593,7 +987,7 @@
                     ),
             ].filter(Boolean);
 
-            window.addEventListener("mousemove", (e) => {
+            function updatePendulums(clientX, clientY) {
                 pendulums.forEach((p) => {
                     if (!p.active()) {
                         p.target.fill(0);
@@ -601,12 +995,12 @@
                     }
                     const base = p.container.getBoundingClientRect();
                     p.elements.forEach((el, i) => {
-                        const cx =
+                        const ccx =
                             base.left + el.offsetLeft + el.offsetWidth / 2;
-                        const cy =
+                        const ccy =
                             base.top + el.offsetTop + el.offsetHeight / 2;
-                        const dx = e.clientX - cx;
-                        const dist = Math.hypot(dx, e.clientY - cy);
+                        const dx = clientX - ccx;
+                        const dist = Math.hypot(dx, clientY - ccy);
                         const falloff = Math.max(0, 1 - dist / p.cfg.radius);
                         p.target[i] =
                             gsap.utils.clamp(
@@ -617,7 +1011,19 @@
                             (falloff * falloff);
                     });
                 });
+            }
+
+            window.addEventListener("mousemove", (e) => {
+                updatePendulums(e.clientX, e.clientY);
             });
+            window.addEventListener(
+                "touchmove",
+                (e) => {
+                    const t = e.touches[0];
+                    if (t) updatePendulums(t.clientX, t.clientY);
+                },
+                { passive: true }
+            );
 
             gsap.ticker.add(() => {
                 pendulums.forEach((p) => {
@@ -943,6 +1349,270 @@ makeTilt(menu3d, ".menu-scene", {
     </script>
 
     <script>
+      // ===== Discografía: progreso del espiral según el scroll de la sección =====
+      (function () {
+        const section = document.getElementById('discografia');
+        if (!section) return;
+        const spiral = section.querySelector('.spiral');
+        if (!spiral) return;
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          spiral.style.setProperty('--progress', '0.5');
+          return;
+        }
+
+        let ticking = false;
+        function update() {
+          ticking = false;
+          const total = section.offsetHeight - window.innerHeight;
+          const progress = total > 0
+            ? Math.min(Math.max(-section.getBoundingClientRect().top / total, 0), 1)
+            : 0;
+          spiral.style.setProperty('--progress', progress.toFixed(4));
+        }
+        function onScroll() {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        update();
+      })();
+    </script>
+
+    <script>
+      // ===== Discografía: popup de discos =====
+      (function () {
+        const RELEASES = {
+          '2026-podran.jpg': {
+            year: '2026',
+            title: '¿Podrán?',
+            desc: 'Lulú presenta ¿Podrán?, su nuevo EP y espectáculo. Acompañada por Las Guitarras Sensibles de Flores, el proyecto recupera el tango desde una propuesta contemporánea donde conviven música en vivo, actuación, performers, artistas invitados, humor, deseo y una fuerte construcción visual. ¿Podrán? no inaugura el universo de Lulú: es la expresión actual de una búsqueda artística que lleva más de dos décadas en movimiento.',
+          },
+          '2026-soy-una-yegua.jpg': {
+            year: '2026',
+            title: 'Soy una Yegua',
+            desc: 'Lulú abre una nueva etapa con el lanzamiento de Soy una Yegua. Deseo, humor, irreverencia y una mirada propia sobre lo femenino vuelven a ocupar el centro de la escena.',
+          },
+          '2024-un-besito.jpg': {
+            year: '2024',
+            title: 'Un Besito',
+            desc: 'Llega Un Besito, continuando una etapa marcada por la experimentación musical y visual. Lulú también continúa participando de diferentes espacios de la escena tanguera porteña y cruces con artistas de otras expresiones.',
+          },
+          '2023-la-colabella.jpg': {
+            year: '2023',
+            title: 'La Colabella',
+            desc: 'Publica el single La Colabella. Junto a Lulú 3000, muestra una artista dispuesta a jugar con su propia identidad, incorporar nuevas estéticas y llevar el universo de Lulú más allá de los códigos tradicionales del tango.',
+          },
+          '2023-lulu-3000.jpg': {
+            year: '2023',
+            title: 'Lulú 3000',
+            desc: 'Publica el single Lulú 3000. Junto a La Colabella, muestra una artista dispuesta a jugar con su propia identidad, incorporar nuevas estéticas y llevar el universo de Lulú más allá de los códigos tradicionales del tango.',
+          },
+          '2022-caliente-caliente.jpg': {
+            year: '2022',
+            title: 'Caliente Caliente',
+            desc: 'Publica el single Caliente Caliente. La sensualidad, el humor y el juego con el personaje adquieren cada vez mayor protagonismo dentro de su lenguaje artístico.',
+          },
+          '2021-fiesta.jpg': {
+            year: '2021',
+            title: 'Fiesta',
+            desc: 'Con Fiesta comienza a hacerse visible una nueva etapa de su producción. El universo de Lulú empieza a expandirse hacia otros lenguajes sonoros, visuales y performáticos, sin abandonar la identidad tanguera que atraviesa su recorrido.',
+          },
+          '2017-me-enamore-una-vez.jpg': {
+            year: '2017',
+            title: 'Me enamoré una vez',
+            desc: 'Después de una extensa etapa de escenarios y proyectos en vivo, Lulú publica Me enamoré una vez, un álbum de 13 canciones. Acompañada por un trío de guitarras, vuelve sobre tangos, valses, milongas y rancheras de distintas épocas. La milonga y yo, Bien de abajo, Yo no sé qué me han hecho tus ojos, Farolito de papel, Milonga arrabalera, Rubias de New York y Ahora te llaman Lulú forman parte del repertorio.',
+          },
+          '2007-argentina-flor-de-mina.jpg': {
+            year: '2007',
+            title: 'Argentina... flor de mina',
+            desc: 'Lulú publica Argentina... flor de mina, su tercer trabajo discográfico: 16 canciones que continúan expandiendo su recorrido por el tango y la música popular argentina. Para entonces, su identidad artística comienza a consolidarse más allá de los discos: música, interpretación y escena empiezan a formar parte de un mismo universo.',
+          },
+          '2004-al-gran-pueblo.jpg': {
+            year: '2004',
+            title: 'Al gran pueblo argentino... Lulú',
+            desc: 'Llega su segundo álbum, un disco de 13 canciones que profundiza su identidad como intérprete. Arrabalera, ¿Y a mí qué?, A lo Magdalena, De contramano, La Canchera, A media luz y ¿Dónde hay un mango? forman parte de un repertorio atravesado por el humor, la personalidad y el universo arrabalero.',
+          },
+          '2001-tanto-gusto.jpg': {
+            year: '2001',
+            title: 'Tanto gusto... no hay de qué',
+            desc: 'Lulú graba su primer álbum. El disco es dedicado y entregado a Tita Merello y, a partir de ese encuentro, comienza un vínculo de madrinazgo artístico que marcará profundamente su recorrido. El repertorio ya deja ver algunos de los rasgos que atravesarán toda su obra: el arrabal, la picardía, los personajes populares y una interpretación donde cantar y actuar forman parte del mismo lenguaje.',
+          },
+        };
+
+        const modal = document.getElementById('disco-modal');
+        if (!modal) return;
+
+        const modalBg = modal.querySelector('.disco-modal-bg');
+        const modalMedia = modal.querySelector('.disco-modal-media');
+        const modalText = modal.querySelector('.disco-modal-text');
+        const modalClose = modal.querySelector('.disco-modal-close');
+        const modalActions = modal.querySelector('.disco-modal-actions');
+        const modalImg = document.getElementById('disco-modal-img');
+        const modalYear = document.getElementById('disco-modal-year');
+        const modalTitle = document.getElementById('disco-modal-title');
+        const modalDesc = document.getElementById('disco-modal-desc');
+
+        const CHRONO = [...document.querySelectorAll('#discografia .strand-primary .card')]
+          .map((card) => card.querySelector('img').getAttribute('src').split('/').pop())
+          .reverse();
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const canAnimate = () => !!window.gsap && !reducedMotion;
+        let isOpen = false;
+        let currentIndex = 0;
+        let openTl = null;
+        let closeTl = null;
+        let navTl = null;
+
+        function buildTitle(text) {
+          modalTitle.textContent = '';
+          const w = document.createElement('span');
+          w.className = 'w';
+          const bg = document.createElement('span');
+          bg.className = 'w-bg';
+          const tx = document.createElement('span');
+          tx.className = 'w-tx';
+          tx.textContent = text;
+          w.append(bg, tx);
+          modalTitle.appendChild(w);
+          return [w];
+        }
+
+        function render(key) {
+          const data = RELEASES[key];
+          if (!data) return [];
+          modalImg.src = 'discos/' + key;
+          modalImg.alt = data.title;
+          modalYear.textContent = data.year;
+          modalDesc.textContent = data.desc;
+          return buildTitle(data.title);
+        }
+
+        function openDisco(key) {
+          const data = RELEASES[key];
+          if (!data) return;
+
+          currentIndex = Math.max(0, CHRONO.indexOf(key));
+          const words = render(key);
+
+          if (closeTl) closeTl.kill();
+          if (openTl) openTl.kill();
+          if (navTl) navTl.kill();
+
+          modal.hidden = false;
+          isOpen = true;
+
+          if (!canAnimate()) return;
+
+          openTl = gsap.timeline();
+          openTl
+            .fromTo(modalBg, { '--wipe': '0%' }, { '--wipe': '100%', duration: 0.65, ease: 'power2.inOut' }, 0)
+            .fromTo(modalMedia, { clipPath: 'inset(0% 0% 0% 100%)', xPercent: 8 }, { clipPath: 'inset(0% 0% 0% 0%)', xPercent: 0, duration: 0.6, ease: 'expo.out' }, 0.3)
+            .fromTo(modalClose, { autoAlpha: 0, scale: 0.5 }, { autoAlpha: 1, scale: 1, duration: 0.4, ease: 'back.out(1.7)' }, 0.45)
+            .fromTo(modalActions, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.5)
+            .fromTo(modalYear, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.5)
+            .fromTo(modalDesc, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.85);
+
+          words.forEach((w, i) => {
+            const bg = w.querySelector('.w-bg');
+            const tx = w.querySelector('.w-tx');
+            const at = 0.55 + i * 0.12;
+            openTl
+              .fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: 'power3.out' }, at)
+              .fromTo(tx, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.45, ease: 'power3.out' }, at);
+          });
+        }
+
+        function goTo(dir) {
+          if (!isOpen) return;
+
+          currentIndex = (currentIndex + dir + CHRONO.length) % CHRONO.length;
+          const key = CHRONO[currentIndex];
+
+          if (!canAnimate()) {
+            render(key);
+            return;
+          }
+
+          if (navTl) navTl.kill();
+          if (openTl) openTl.kill();
+
+          navTl = gsap.timeline();
+          navTl
+            .to([modalMedia, modalText], { autoAlpha: 0, x: -50 * dir, duration: 0.28, ease: 'power2.in' })
+            .call(() => {
+              const words = render(key);
+
+              const inTl = gsap.timeline();
+              inTl.fromTo([modalMedia, modalText], { autoAlpha: 0, x: 50 * dir }, { autoAlpha: 1, x: 0, duration: 0.45, ease: 'power3.out' }, 0);
+              words.forEach((w, i) => {
+                const bg = w.querySelector('.w-bg');
+                const tx = w.querySelector('.w-tx');
+                const at = 0.06 + i * 0.08;
+                inTl
+                  .fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: 'power3.out' }, at)
+                  .fromTo(tx, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.4, ease: 'power3.out' }, at);
+              });
+            });
+        }
+
+        function closeDisco() {
+          if (!isOpen) return;
+          isOpen = false;
+
+          if (openTl) openTl.kill();
+          if (navTl) navTl.kill();
+
+          if (!canAnimate()) {
+            modal.hidden = true;
+            return;
+          }
+
+          const words = modalTitle.querySelectorAll('.w');
+          closeTl = gsap.timeline({
+            onComplete: () => {
+              modal.hidden = true;
+            },
+          });
+          closeTl
+            .to(modalDesc, { autoAlpha: 0, y: 12, duration: 0.25, ease: 'power2.in' }, 0)
+            .to(modalYear, { autoAlpha: 0, y: 12, duration: 0.25, ease: 'power2.in' }, 0)
+            .to(modalClose, { autoAlpha: 0, scale: 0.5, duration: 0.25, ease: 'power2.in' }, 0)
+            .to(modalActions, { autoAlpha: 0, y: 16, duration: 0.25, ease: 'power2.in' }, 0)
+            .to(words, { autoAlpha: 0, duration: 0.25, stagger: 0.04, ease: 'power2.in' }, 0)
+            .to(modalMedia, { clipPath: 'inset(0% 0% 0% 100%)', xPercent: 8, duration: 0.4, ease: 'power3.inOut' }, 0.05)
+            .to(modalBg, { '--wipe': '0%', duration: 0.5, ease: 'power2.inOut' }, 0.15);
+        }
+
+        document.querySelectorAll('#discografia .card').forEach((card) => {
+          card.addEventListener('click', () => {
+            const img = card.querySelector('img');
+            if (!img) return;
+            openDisco(img.getAttribute('src').split('/').pop());
+          });
+        });
+
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal || e.target === modalBg) closeDisco();
+        });
+        modal.querySelector('.disco-modal-close').addEventListener('click', closeDisco);
+        modal.querySelectorAll('.disco-modal-btn').forEach((btn) => {
+          btn.addEventListener('click', () => goTo(Number(btn.dataset.dir)));
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeDisco();
+          if (!isOpen) return;
+          if (e.key === 'ArrowRight') goTo(1);
+          if (e.key === 'ArrowLeft') goTo(-1);
+        });
+      })();
+    </script>
+
+    <script>
       window.process = window.process || { env: { NODE_ENV: "production" } };
     </script>
 
@@ -973,6 +1643,20 @@ makeTilt(menu3d, ".menu-scene", {
     })
       .then(() => console.log('[magnetic] render OK'))
       .catch((e) => console.error('[magnetic] error:', e));
+  }
+</script>
+
+<script type="module">
+  import { createShader, isWebGPUSupported } from 'https://cdn.jsdelivr.net/npm/shaders@latest/dist/js/index.min.js';
+
+  if (isWebGPUSupported()) {
+    createShader(document.getElementById('discografia-shader'), {
+      components: [
+        { type: 'Smoke', id: 'smoke', props: { colorA: '#860d09', colorB: '#380200' } },
+      ],
+    })
+      .then(() => console.log('[discografia] render OK (Smoke)'))
+      .catch((e) => console.error('[discografia] error:', e));
   }
 </script>
 </body>
